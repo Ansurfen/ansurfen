@@ -4,9 +4,10 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+  schedule: [{cron: "0 0 * * *"}]
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -41,12 +42,28 @@ jobs:
             ${{ runner.os }}-pnpm-store-
       - name: Install dependencies
         run: pnpm install
+      - name: Generate metrics
+        uses: lowlighter/metrics@latest
+        with:
+          filename: public/metrics.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          output_action: none
+          config_timezone: Asia/Shanghai
+          base: header, repositories, metadata
+          plugin_isocalendar: yes
+          plugin_isocalendar_duration: full-year
+          plugin_lines: yes
+          plugin_lines_history_limit: 1
+          plugin_lines_sections: base
+          plugin_lines_delay: 30
+          plugin_languages: yes
+          plugin_languages_details: percentage, bytes-size
+          plugin_followup: yes
+          plugin_followup_sections: user
       - name: Build
         run: pnpm run build
       - name: Setup Pages
         uses: actions/configure-pages@v4
-        with:
-          enablement: true
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
