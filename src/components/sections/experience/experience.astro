@@ -1,0 +1,29 @@
+---
+import Box from "@/components/box/index.astro";
+import BoxHeader from "@/components/box/header.astro";
+import BoxTitle from "@/components/box/title.astro";
+import BoxContent from "@/components/box/content.astro";
+
+import { EXPERIENCES } from "@/lib/constants/experience";
+import ExperienceItem from "./experience-item.astro";
+import type { ExperienceText } from "@/lib/constants/i18n";
+
+interface Props {
+  text: ExperienceText;
+}
+
+const { text } = Astro.props;
+---
+
+<Box>
+  <BoxHeader>
+    <BoxTitle> {text.name} </BoxTitle>
+  </BoxHeader>
+  <BoxContent className="px-0">
+    {
+      EXPERIENCES.map(experience => {
+        return <ExperienceItem experience={experience} showMore={text.showMore} showLess={text.showLess} />;
+      })
+    }
+  </BoxContent>
+</Box>
