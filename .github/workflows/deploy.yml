@@ -67,7 +67,7 @@ jobs:
           plugin_languages_details: percentage, bytes-size
           plugin_followup: yes
           plugin_followup_sections: user
-          output: public/metrics.svg
+          filename: public/metrics.svg
           output_action: none
           config_timezone: Asia/Shanghai
       - name: Check generated files
