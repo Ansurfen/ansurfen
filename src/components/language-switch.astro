@@ -53,7 +53,7 @@ const currentLang = (Object.keys(languages) as LanguageCode[]).find(key =>
     zh_cn: { path: '/zh_cn' }
   };
 
-  // 新版本：切换语言时移除所有语言前缀
+  // 切换语言时移除所有语言前缀
   const setLanguage = (langCode, clickedButton) => {
     localStorage.setItem("language", langCode);
     

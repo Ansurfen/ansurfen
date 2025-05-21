@@ -8,14 +8,14 @@ import mdx from "@astrojs/mdx";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://ansurfen.github.io/ansurfen',
-  base: '/ansurfen',
+  site: "https://ansurfen.github.io",
+  base: "/",
   integrations: [react(), mdx()],
   vite: {
     plugins: [tailwindcss()],
   },
   i18n: {
-    defaultLocale: 'en_us',
-    locales: ['en_us', 'zh_cn'],
+    defaultLocale: "en_us",
+    locales: ["en_us", "zh_cn"],
   },
 });
