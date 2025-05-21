@@ -44,13 +44,18 @@ jobs:
         run: pnpm install
       - name: Create public directory
         run: mkdir -p public
+      - name: Check token
+        run: |
+          if [ -n "${{ secrets.METRICS_TOKEN }}" ]; then
+            echo "METRICS_TOKEN is set"
+          else
+            echo "METRICS_TOKEN is not set"
+            exit 1
+          fi
       - name: Generate metrics
         uses: lowlighter/metrics@latest
         with:
-          filename: metrics.svg
           token: ${{ secrets.METRICS_TOKEN }}
-          output_action: none
-          config_timezone: Asia/Shanghai
           base: header, repositories, metadata
           plugin_isocalendar: yes
           plugin_isocalendar_duration: full-year
@@ -62,12 +67,9 @@ jobs:
           plugin_languages_details: percentage, bytes-size
           plugin_followup: yes
           plugin_followup_sections: user
-      - name: Move metrics file
-        run: |
-          echo "Current directory contents:"
-          ls -la
-          echo "Moving metrics.svg to public directory..."
-          mv metrics.svg public/ || echo "Failed to move metrics.svg"
+          output: public/metrics.svg
+          output_action: none
+          config_timezone: Asia/Shanghai
       - name: Check generated files
         run: |
           echo "Checking public directory contents:"
