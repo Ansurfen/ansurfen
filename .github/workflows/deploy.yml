@@ -4,16 +4,11 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
-  schedule: [{cron: "0 0 * * *"}]
 
 permissions:
   contents: write
   pages: write
   id-token: write
-  issues: read
-  pull-requests: read
-  discussions: read
-  packages: read
 
 concurrency:
   group: "pages"
@@ -25,8 +20,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -48,49 +41,8 @@ jobs:
             ${{ runner.os }}-pnpm-store-
       - name: Install dependencies
         run: pnpm install
-      - name: Create public directory
-        run: mkdir -p public
-      - name: Check token
-        run: |
-          if [ -n "${{ secrets.METRICS_TOKEN }}" ]; then
-            echo "METRICS_TOKEN is set"
-          else
-            echo "METRICS_TOKEN is not set"
-            exit 1
-          fi
-      - name: Generate metrics
-        uses: lowlighter/metrics@latest
-        with:
-          token: ${{ secrets.METRICS_TOKEN }}
-          base: header, repositories, metadata
-          plugin_isocalendar: yes
-          plugin_isocalendar_duration: full-year
-          plugin_lines: yes
-          plugin_lines_history_limit: 1
-          plugin_lines_sections: base
-          plugin_lines_delay: 30
-          plugin_languages: yes
-          plugin_languages_details: percentage, bytes-size
-          plugin_followup: yes
-          plugin_followup_sections: user
-          committer_token: ${{ secrets.GITHUB_TOKEN }}
-          filename: public/metrics.svg
-          output_action: none
-          config_timezone: Asia/Shanghai
-      - name: Check generated files
-        run: |
-          echo "Checking public directory contents:"
-          ls -la public/
-          echo "Checking if metrics.svg exists:"
-          test -f public/metrics.svg && echo "metrics.svg exists" || echo "metrics.svg not found"
       - name: Build
         run: pnpm run build
-      - name: Check dist directory
-        run: |
-          echo "Checking dist directory contents:"
-          ls -la dist/
-          echo "Checking if metrics.svg exists in dist:"
-          test -f dist/metrics.svg && echo "metrics.svg exists in dist" || echo "metrics.svg not found in dist"
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
