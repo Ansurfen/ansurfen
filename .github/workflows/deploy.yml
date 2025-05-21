@@ -42,10 +42,12 @@ jobs:
             ${{ runner.os }}-pnpm-store-
       - name: Install dependencies
         run: pnpm install
+      - name: Build
+        run: pnpm run build
       - name: Generate metrics
         uses: lowlighter/metrics@latest
         with:
-          filename: public/metrics.svg
+          filename: dist/metrics.svg
           token: ${{ secrets.METRICS_TOKEN }}
           output_action: none
           config_timezone: Asia/Shanghai
@@ -60,8 +62,6 @@ jobs:
           plugin_languages_details: percentage, bytes-size
           plugin_followup: yes
           plugin_followup_sections: user
-      - name: Build
-        run: pnpm run build
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
