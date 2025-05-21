@@ -62,8 +62,20 @@ jobs:
           plugin_languages_details: percentage, bytes-size
           plugin_followup: yes
           plugin_followup_sections: user
+      - name: Check generated files
+        run: |
+          echo "Checking public directory contents:"
+          ls -la public/
+          echo "Checking if metrics.svg exists:"
+          test -f public/metrics.svg && echo "metrics.svg exists" || echo "metrics.svg not found"
       - name: Build
         run: pnpm run build
+      - name: Check dist directory
+        run: |
+          echo "Checking dist directory contents:"
+          ls -la dist/
+          echo "Checking if metrics.svg exists in dist:"
+          test -f dist/metrics.svg && echo "metrics.svg exists in dist" || echo "metrics.svg not found in dist"
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
