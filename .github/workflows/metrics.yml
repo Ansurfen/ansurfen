@@ -32,5 +32,6 @@ jobs:
           plugin_followup_sections: user
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: /metrics_renders
+          path: .
       - uses: actions/deploy-pages@v4
+        id: deployment

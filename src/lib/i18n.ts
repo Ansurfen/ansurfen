@@ -14,5 +14,6 @@ export function getPath(url: URL) {
   const target = (Object.keys(languages) as LanguageCode[]).find(key =>
     url.pathname.startsWith(languages[key].path)
   ) || "en_us";
-  return target !== "en_us" ? `/${target}` : "";
+  const base = "/ansurfen";
+  return target !== "en_us" ? `${base}/${target}` : base;
 }
