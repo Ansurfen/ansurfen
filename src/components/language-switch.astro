@@ -6,7 +6,7 @@ import { languages, type LanguageCode } from "@/lib/i18n";
 // 获取当前语言（从URL路径）
 const currentPath = Astro.url.pathname;
 const currentLang = (Object.keys(languages) as LanguageCode[]).find(key => 
-  currentPath.startsWith(languages[key].path)
+  currentPath.startsWith(`/ansurfen${languages[key].path}`)
 ) || 'en_us';
 ---
 
@@ -59,6 +59,14 @@ const currentLang = (Object.keys(languages) as LanguageCode[]).find(key =>
     
     // 获取当前路径并移除任何语言前缀
     let currentPath = window.location.pathname;
+    const base = '/ansurfen';
+    
+    // 移除基础路径
+    if (currentPath.startsWith(base)) {
+      currentPath = currentPath.slice(base.length);
+    }
+    
+    // 移除语言前缀
     for (const { path } of Object.values(langConfig)) {
       if (currentPath.startsWith(path)) {
         currentPath = currentPath.slice(path.length);
@@ -68,8 +76,8 @@ const currentLang = (Object.keys(languages) as LanguageCode[]).find(key =>
     
     // 英语(en_us)时直接跳转到无前缀路径，其他语言保持前缀
     const newPath = langCode === 'en_us' 
-      ? currentPath || '/' 
-      : `/${langCode}${currentPath}`;
+      ? `${base}${currentPath || '/'}` 
+      : `${base}/${langCode}${currentPath}`;
     
     window.location.href = newPath;
   };
@@ -88,8 +96,8 @@ const currentLang = (Object.keys(languages) as LanguageCode[]).find(key =>
       
       // 英语特殊处理：无前缀或/en_us都算选中
       const isSelected = langCode === 'en_us'
-        ? !currentPath.startsWith('/zh_cn')
-        : currentPath.startsWith(langPath);
+        ? !currentPath.startsWith('/ansurfen/zh_cn')
+        : currentPath.startsWith(`/ansurfen${langPath}`);
       
       button.setAttribute("data-selected", isSelected ? "true" : "false");
     });

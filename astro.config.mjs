@@ -9,7 +9,7 @@ import mdx from "@astrojs/mdx";
 // https://astro.build/config
 export default defineConfig({
   site: "https://ansurfen.github.io",
-  base: "/",
+  base: "/ansurfen",
   integrations: [react(), mdx()],
   vite: {
     plugins: [tailwindcss()],
