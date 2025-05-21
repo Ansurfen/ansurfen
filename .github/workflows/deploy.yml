@@ -10,6 +10,10 @@ permissions:
   contents: write
   pages: write
   id-token: write
+  issues: read
+  pull-requests: read
+  discussions: read
+  packages: read
 
 concurrency:
   group: "pages"
@@ -21,6 +25,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -67,6 +73,7 @@ jobs:
           plugin_languages_details: percentage, bytes-size
           plugin_followup: yes
           plugin_followup_sections: user
+          committer_token: ${{ secrets.GITHUB_TOKEN }}
           filename: public/metrics.svg
           output_action: none
           config_timezone: Asia/Shanghai
